@@ -1,7 +1,5 @@
 let display = document.getElementById('display');
 let currentValue = '0';
-let previousValue = '';
-let operation = null;
 let shouldResetDisplay = false;
 
 function updateDisplay() {
@@ -29,8 +27,6 @@ function appendToDisplay(value) {
 
 function clearDisplay() {
     currentValue = '0';
-    previousValue = '';
-    operation = null;
     shouldResetDisplay = false;
     updateDisplay();
 }
@@ -46,7 +42,15 @@ function deleteChar() {
 
 function calculate() {
     try {
-        // Using eval for simple calculation (Note: In production, use a safer parser)
+        // Validate input contains only allowed characters (numbers, operators, decimal point)
+        if (!/^[0-9+\-*/.() ]+$/.test(currentValue)) {
+            currentValue = 'Error';
+            shouldResetDisplay = true;
+            updateDisplay();
+            return;
+        }
+        
+        // Using eval for simple calculation (input is validated above)
         const result = eval(currentValue);
         
         if (isNaN(result) || !isFinite(result)) {
